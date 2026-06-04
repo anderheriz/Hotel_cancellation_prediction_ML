@@ -1,6 +1,0 @@
-﻿Data/Raw/*.csv
-Data/Processed/*.csv
-Models/*
-*.pyc
-__pycache__/
-.ipynb_checkpoints/
