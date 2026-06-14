@@ -2,63 +2,67 @@
 
 Proyecto de Machine Learning para predecir cancelaciones hoteleras usando el dataset Hotel Booking Demand.
 
-## Objetivo
-
-Predecir si una reserva hotelera sera cancelada (`is_canceled`) a partir de variables de la reserva, cliente, canal de venta, deposito, fechas y precio.
-
-## Estructura actual
+## Estructura del proyecto
 
 ```text
-data/
-  raw/hotel_bookings.csv
-  processed/hotel_bookings_clean.csv
-  train/train.csv
-  test/test.csv
-notebooks/
-  01_fuentes.ipynb
-  02_limpiezaEDA.ipynb
-  03_baseline_random_forest.ipynb
-src/
-  data_processing.py
-  training.py
-  evaluation.py
-  train_baseline.py
-models/
-  baseline_random_forest.pkl
+Proyecto_ML/
+|-- app_streamlit/
+|   `-- app.py
+|-- data/
+|   |-- raw/
+|   |   `-- hotel_bookings.csv
+|   |-- processed/
+|   |   `-- hotel_bookings_clean.csv
+|   |-- train/
+|   |   `-- train.csv
+|   `-- test/
+|       `-- test.csv
+|-- docs/
+|-- models/
+|   |-- trained_model_1.pkl
+|   |-- final_model.pkl
+|   `-- model_config.yaml
+|-- notebooks/
+|   |-- 01_fuentes.ipynb
+|   |-- 02_limpiezaEDA.ipynb
+|   `-- 03_entrenamiento_evaluacion.ipynb
+|-- src/
+|   |-- data_processing.py
+|   |-- evaluation.py
+|   `-- training.py
+`-- README.md
 ```
 
 ## Dataset
 
 Fuente: Kaggle - Hotel Booking Demand.
 
-Target: `is_canceled`.
+El objetivo es predecir la variable `is_canceled`, que indica si una reserva hotelera fue cancelada o no.
 
-Problema: clasificacion binaria supervisada.
+## Flujo de trabajo
 
-## Baseline
+1. `01_fuentes.ipynb`: fuente del dataset y contexto inicial.
+2. `02_limpiezaEDA.ipynb`: limpieza, EDA, tratamiento de variables, decision sobre duplicados y guardado del dataset limpio con su split train/test.
+3. `03_entrenamiento_evaluacion.ipynb`: comparacion de modelos, evaluacion, hiperparametrizacion de XGBoost y seleccion del modelo final.
 
-La primera iteracion del modelo usa Random Forest como baseline. El entrenamiento se encuentra en:
+## Modelos guardados
 
-```text
-notebooks/03_baseline_random_forest.ipynb
-```
+- `models/trained_model_1.pkl`: modelo entrenado intermedio.
+- `models/final_model.pkl`: modelo final tras la hiperparametrizacion.
+- `models/model_config.yaml`: configuracion y metricas del modelo final.
 
-El modelo baseline guardado es:
+## Scripts
 
-```text
-models/baseline_random_forest.pkl
-```
+- `src/data_processing.py`: funciones de carga, limpieza y generacion de `processed`, `train` y `test`.
+- `src/training.py`: preprocesado, definicion de modelos y entrenamiento.
+- `src/evaluation.py`: metricas de evaluacion para clasificacion binaria.
 
-## Ejecucion
+## Demo Streamlit
 
-Generar datos procesados:
+La demo interactiva se encuentra en `app_streamlit/app.py`.
 
-```bash
-python src/data_processing.py
-```
-
-Entrenar baseline:
+Ejecutar desde la raiz del proyecto:
 
 ```bash
-python src/train_baseline.py
+streamlit run app_streamlit/app.py
 ```

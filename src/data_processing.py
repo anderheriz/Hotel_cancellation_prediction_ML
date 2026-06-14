@@ -1,9 +1,13 @@
 from pathlib import Path
 
 import pandas as pd
+from sklearn.model_selection import train_test_split
+
 ROOT = Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "data" / "raw" / "hotel_bookings.csv"
 PROCESSED_PATH = ROOT / "data" / "processed" / "hotel_bookings_clean.csv"
+TRAIN_PATH = ROOT / "data" / "train" / "train.csv"
+TEST_PATH = ROOT / "data" / "test" / "test.csv"
 TARGET = "is_canceled"
 RANDOM_STATE = 42
 
@@ -63,6 +67,33 @@ def save_processed_data():
     return df_clean
 
 
+def save_train_test_data(df_clean=None, test_size=0.2):
+    if df_clean is None:
+        if PROCESSED_PATH.exists():
+            df_clean = pd.read_csv(PROCESSED_PATH)
+        else:
+            df_clean = save_processed_data()
+
+    train_df, test_df = train_test_split(
+        df_clean,
+        test_size=test_size,
+        random_state=RANDOM_STATE,
+        stratify=df_clean[TARGET],
+    )
+
+    TRAIN_PATH.parent.mkdir(parents=True, exist_ok=True)
+    TEST_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    train_df.to_csv(TRAIN_PATH, index=False)
+    test_df.to_csv(TEST_PATH, index=False)
+
+    return train_df, test_df
+
+
 if __name__ == "__main__":
     clean = save_processed_data()
+    train, test = save_train_test_data(clean)
+
     print("clean", clean.shape)
+    print("train", train.shape)
+    print("test", test.shape)
